@@ -3,7 +3,13 @@ import 'package:sql_lite_app/home.dart';
 import 'package:sql_lite_app/sqldb.dart';
 
 class EditNodes extends StatefulWidget {
-  const EditNodes({super.key});
+
+  final note;
+  final title;
+  final color;
+  final id;
+
+  const EditNodes({super.key, this.note, this.title, this.id, this.color});
 
   @override
   State<EditNodes> createState() => _EditNodesState();
@@ -18,6 +24,16 @@ class _EditNodesState extends State<EditNodes> {
   TextEditingController note = TextEditingController();
   TextEditingController color = TextEditingController();
 
+
+@override
+  void initState() {
+
+note.text=widget.note;
+title.text=widget.title;
+color.text=widget.color;
+
+    super.initState();
+  }
   @override
   void dispose() {
     title.dispose();
@@ -55,15 +71,14 @@ class _EditNodesState extends State<EditNodes> {
               const SizedBox(height: 16),
               _buildTextField(
                 controller: color,
-                hint: "Enter color code",
+                hint: "Enter color ",
                 icon: Icons.color_lens,
               ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: () async{
                int response= await sqldb.insertData(
-                  "INSERT INTO notes (title, note, color) VALUES ('${title.text}', '${note.text}', '${color.text}')"
-                );
+                'UPDATE notes SET title = "${title.text}", note = "${note.text}", color = "${color.text}" WHERE id = ${widget.id}');
 
                 if(response>0){
                   Navigator.of(context).pushAndRemoveUntil(

@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
                         icon: Icon(Icons.delete_outline),color: Colors.redAccent,),
                         SizedBox(width: 10,),
                         IconButton(onPressed: ()async{
-                        
+                       Navigator.of(context).pop();
                         },
                         icon: Icon(Icons.update_outlined),color: Colors.blueAccent,),
                       ],
