@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sql_lite_app/add_notes.dart';
 import 'package:sql_lite_app/home.dart';
 
 void main() {
@@ -14,6 +15,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'sqflite Demo',
       home: Home(),
+      routes: {
+        "addnotes":(context)=>AddNotes(),
+      },
     );
   }
 }

@@ -11,12 +11,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Sqldb sqldb = Sqldb();
 
- Future<List<Map>>readdata()async{
-  List<Map> response = await sqldb.readData('SELECT * FROM notes');
-  return response;
-
+  Future<List<Map>> readdata() async {
+    List<Map> response = await sqldb.readData('SELECT * FROM notes');
+    return response;
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -26,44 +24,48 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
       ),
-      floatingActionButton: FloatingActionButton(onPressed: ()async{},
-      child: Icon(Icons.add)
+      floatingActionButton: FloatingActionButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        backgroundColor: Colors.blueAccent,
+        onPressed: () {
+          Navigator.of(context).pushNamed("addnotes");
+        },
+        child: const Icon(Icons.add, color: Colors.white),
       ),
-      body: Container(
-        child: ListView(
-          children: [
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: FutureBuilder(
+          future: readdata(),
+          builder: (BuildContext context, AsyncSnapshot<List<Map>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text("Error: ${snapshot.error}"));
+            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text("No notes found"));
+            }
 
-            // MaterialButton(onPressed: ()async{
-            //  await  sqldb.mydeleteDatabase();
-
-            // },
-            // child: Text("Delete DataBase"),),
-            FutureBuilder( 
-              future: readdata(),
-              builder: (BuildContext context , AsyncSnapshot<List<Map>> snapshot) {
-              if(snapshot.hasData){
-                
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context,i){
-                    return Card(child: ListTile(
-                      title:Text(snapshot.data![i]['note'].toString(),
-                    )));
-                  
-
-                });
-              }
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-
-              
-
-            })
-
-          ],
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, i) {
+                return Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: ListTile(
+                    title: Text(snapshot.data![i]['title']?.toString() ?? 'No Title',
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text(snapshot.data![i]['note']?.toString() ?? 'No Note'),
+                    trailing: Text(
+                      snapshot.data![i]['color']?.toString() ?? '',
+                      style: const TextStyle(color: Colors.blueAccent),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );

@@ -22,7 +22,7 @@ intialDb()async{
 
   Database database = await openDatabase(
     path,
-    version: 3,
+    version: 4,
     onCreate: _onCreate,
     onUpgrade: _onUpgrade,
   );// Create the database if it doesn't exist
@@ -33,10 +33,12 @@ intialDb()async{
 _onUpgrade(Database db,int oldversion,int newversion)async{
 
   print("Upgrade data base=================");// Handle database upgrades if needed
-  await db.execute("ALTER TABLE notes ADD COLUMN color TEXT");
+   await db.execute("ALTER TABLE notes ADD COLUMN color TEXT");
 }
 
 _onCreate (Database db, int version) async {
+
+  
   await db.execute('''
     CREATE TABLE "notes"(
       "id" INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
