@@ -10,10 +10,27 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Sqldb sqldb = Sqldb();
+   
+   bool isLoading = true;
 
-  Future<List<Map>> readdata() async {
+  List notes = [];
+
+  Future readdata() async {
     List<Map> response = await sqldb.readData('SELECT * FROM notes');
-    return response;
+    notes.addAll(response);
+    isLoading = false;
+    if(mounted){
+      setState(() {
+         
+      });
+    }
+     
+  }
+
+  @override
+  void initState() {
+    readdata();
+    super.initState();
   }
 
   @override
@@ -34,19 +51,8 @@ class _HomeState extends State<Home> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: FutureBuilder(
-          future: readdata(),
-          builder: (BuildContext context, AsyncSnapshot<List<Map>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text("Error: ${snapshot.error}"));
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text("No notes found"));
-            }
-
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
+        child:  ListView.builder(
+              itemCount: notes.length,
               itemBuilder: (context, i) {
                 return Card(
                   elevation: 4,
@@ -54,19 +60,25 @@ class _HomeState extends State<Home> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: ListTile(
-                    title: Text(snapshot.data![i]['title']?.toString() ?? 'No Title',
+                    title: Text(notes[i]['title']?.toString() ?? 'No Title',
                         style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text(snapshot.data![i]['note']?.toString() ?? 'No Note'),
-                    trailing: Text(
-                      snapshot.data![i]['color']?.toString() ?? '',
-                      style: const TextStyle(color: Colors.blueAccent),
-                    ),
+                    subtitle: Text(notes[i]['note']?.toString() ?? 'No Note'),
+                    trailing: IconButton(onPressed: ()async{
+                      int response = await sqldb.deleteData('DELETE FROM notes WHERE id = ${notes[i]['id']}');
+                      if(response>0){
+                        notes.removeWhere((element)=>element['id'] == notes[i]['id']);
+                        setState(() {
+                          
+                        });
+                      }
+
+                    },
+                    icon: Icon(Icons.delete_outline),color: Colors.redAccent,),
                   ),
                 );
               },
-            );
-          },
-        ),
+            )
+          
       ),
     );
   }
