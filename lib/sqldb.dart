@@ -38,7 +38,7 @@ _onUpgrade(Database db,int oldversion,int newversion)async{
 
 _onCreate (Database db, int version) async {
 
-  
+
   await db.execute('''
     CREATE TABLE "notes"(
       "id" INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -76,6 +76,35 @@ updateData(String sql)async{
 }
 // DELETE
 deleteData(String sql)async{
+  Database? database =await db;
+  int response =await database!.rawDelete(sql);
+  return response;// Execute the SQL query and return the result
+
+}
+
+read(String table)async{
+  Database? database =await db;
+  List<Map> response =await database!.query(table);
+  return response;// Execute the SQL query and return the result
+
+}
+ // INSERT
+insert(String sql)async{
+  Database? database =await db;
+  int response =await database!.rawInsert(sql);
+  return response;// Execute the SQL query and return the result
+
+}
+
+// UPDATE
+update(String sql)async{
+  Database? database =await db;
+  int response =await database!.rawUpdate(sql);
+  return response;// Execute the SQL query and return the result
+
+}
+// DELETE
+delete(String sql)async{
   Database? database =await db;
   int response =await database!.rawDelete(sql);
   return response;// Execute the SQL query and return the result

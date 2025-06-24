@@ -16,7 +16,7 @@ class _HomeState extends State<Home> {
   List notes = [];
 
   Future readdata() async {
-    List<Map> response = await sqldb.readData('SELECT * FROM notes');
+    List<Map> response = await sqldb.read('notes');
     notes.addAll(response);
     isLoading = false;
     if(mounted){
