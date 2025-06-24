@@ -11,6 +11,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Sqldb sqldb = Sqldb();
 
+ Future<List<Map>>readdata()async{
+  List<Map> response = await sqldb.readData('SELECT * FROM notes');
+  return response;
+
+  }
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,55 +26,44 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.blueAccent,
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: ()async {
+      floatingActionButton: FloatingActionButton(onPressed: ()async{},
+      child: Icon(Icons.add)
+      ),
+      body: Container(
+        child: ListView(
+          children: [
 
-                     int response= await sqldb.insertData("INSERT INTO 'notes' ('note') VALUES ('note one') "); 
-                    // Insert data action
-                  },
-                  icon: const Icon(Icons.add),
-                  label: const Text('Insert Data'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.green,
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: ()async {
+            // MaterialButton(onPressed: ()async{
+            //  await  sqldb.mydeleteDatabase();
 
-                  List<Map> response=  await sqldb.readData("SELECT * FROM 'notes'");
-                    print("${response}");// Read data action
-                  },
-                  icon: const Icon(Icons.cloud_download),
-                  label: const Text('Read Data'),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    backgroundColor: Colors.blue,
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            // },
+            // child: Text("Delete DataBase"),),
+            FutureBuilder( 
+              future: readdata(),
+              builder: (BuildContext context , AsyncSnapshot<List<Map>> snapshot) {
+              if(snapshot.hasData){
+                
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context,i){
+                    return Card(child: ListTile(
+                      title:Text(snapshot.data![i]['note'].toString(),
+                    )));
+                  
+
+                });
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+
+              
+
+            })
+
+          ],
         ),
       ),
     );

@@ -22,7 +22,7 @@ intialDb()async{
 
   Database database = await openDatabase(
     path,
-    version: 2,
+    version: 3,
     onCreate: _onCreate,
     onUpgrade: _onUpgrade,
   );// Create the database if it doesn't exist
@@ -30,16 +30,17 @@ intialDb()async{
   return database;// Return the database instance
 }
 
-_onUpgrade(Database db,int oldversion,int newversion){
+_onUpgrade(Database db,int oldversion,int newversion)async{
 
   print("Upgrade data base=================");// Handle database upgrades if needed
-
+  await db.execute("ALTER TABLE notes ADD COLUMN color TEXT");
 }
 
 _onCreate (Database db, int version) async {
   await db.execute('''
     CREATE TABLE "notes"(
       "id" INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT,
+      "title" TEXT NOT NULL,
       "note" TEXT NOT NULL
     )
   ''');
@@ -78,4 +79,10 @@ deleteData(String sql)async{
   return response;// Execute the SQL query and return the result
 
 }
-}
+
+mydeleteDatabase()async{
+  String databasepath= await getDatabasesPath();
+  String path = join(databasepath , 'mydatabase.db');
+  await deleteDatabase(path);// Delete the database file
+  // Reset the _db variable to null 
+}}
