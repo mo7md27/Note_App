@@ -63,17 +63,27 @@ class _HomeState extends State<Home> {
                     title: Text(notes[i]['title']?.toString() ?? 'No Title',
                         style: const TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text(notes[i]['note']?.toString() ?? 'No Note'),
-                    trailing: IconButton(onPressed: ()async{
-                      int response = await sqldb.deleteData('DELETE FROM notes WHERE id = ${notes[i]['id']}');
-                      if(response>0){
-                        notes.removeWhere((element)=>element['id'] == notes[i]['id']);
-                        setState(() {
-                          
-                        });
-                      }
-
-                    },
-                    icon: Icon(Icons.delete_outline),color: Colors.redAccent,),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(onPressed: ()async{
+                          int response = await sqldb.deleteData('DELETE FROM notes WHERE id = ${notes[i]['id']}');
+                          if(response>0){
+                            notes.removeWhere((element)=>element['id'] == notes[i]['id']);
+                            setState(() {
+                              
+                            });
+                          }
+                        
+                        },
+                        icon: Icon(Icons.delete_outline),color: Colors.redAccent,),
+                        SizedBox(width: 10,),
+                        IconButton(onPressed: ()async{
+                        
+                        },
+                        icon: Icon(Icons.update_outlined),color: Colors.blueAccent,),
+                      ],
+                    ),
                   ),
                 );
               },
