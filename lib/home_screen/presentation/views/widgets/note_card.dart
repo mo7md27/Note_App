@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sql_lite_app/edit_nodes.dart';
+import 'package:sql_lite_app/edit_screen/presentation/views/edit_nodes.dart';
 
 class NoteCard extends StatelessWidget {
   final int id;

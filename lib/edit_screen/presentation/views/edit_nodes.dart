@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sql_lite_app/home_screen/presentation/views/home.dart';
+import 'package:sql_lite_app/add_screen/presentation/views/widgets/build_textfiled.dart';
+import 'package:sql_lite_app/edit_screen/presentation/views/widgets/update_button.dart';
 import 'package:sql_lite_app/sqldb.dart';
 
 class EditNodes extends StatefulWidget {
@@ -56,45 +57,26 @@ color.text=widget.color;
           key: formstate,
           child: ListView(
             children: [
-              _buildTextField(
+              buildTextField(
                 controller: title,
                 hint: "Enter title",
                 icon: Icons.title,
               ),
               const SizedBox(height: 16),
-              _buildTextField(
+              buildTextField(
                 controller: note,
                 
                 hint: "Enter note",
                 icon: Icons.note,
               ),
               const SizedBox(height: 16),
-              _buildTextField(
+              buildTextField(
                 controller: color,
                 hint: "Enter color ",
                 icon: Icons.color_lens,
               ),
               const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () async{
-               int response= await sqldb.insertData(
-                'UPDATE notes SET title = "${title.text}", note = "${note.text}", color = "${color.text}" WHERE id = ${widget.id}');
-
-                if(response>0){
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context)=>Home()), 
-                      (route)=>false);
-                }
-                print("response=========================");
-                  
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: const Text("Save Edit"),
-              )
+              Update_Button(sqldb: sqldb, title: title, note: note, color: color, widget: widget)
             ],
           ),
         ),
@@ -102,26 +84,6 @@ color.text=widget.color;
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-   
-    required String hint,
-    required IconData icon,
-  }) {
-    return TextFormField(
-      controller: controller,
-      validator: (val) {
-       
-      },
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: Colors.blueAccent),
-        hintText: hint,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
-        ),
-      ),
-    );
-  }
+  
 }
+
