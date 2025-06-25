@@ -1,16 +1,26 @@
-# sql_lite_app
+# 📝 Note App – Flutter + SQLite
 
-A new Flutter project.
+A simple and clean Flutter note-taking application that uses **SQLite** for local data persistence via the `sqflite` package.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- Create, read, update, and delete (CRUD) notes
+- Local storage using SQLite (`sqflite`)
+- Simple and intuitive UI
+- Offline functionality
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Getting Started
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Prerequisites
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter SDK (latest stable version)
+- Dart SDK
+- Android Studio / VS Code
+- Emulator or real device
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/sql_lite_app.git
+   cd sql_lite_app
