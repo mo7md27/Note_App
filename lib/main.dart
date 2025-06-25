@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sql_lite_app/add_notes.dart';
-import 'package:sql_lite_app/home.dart';
+import 'package:sql_lite_app/home_screen/presentation/views/home.dart';
 
 void main() {
   runApp(MyApp());

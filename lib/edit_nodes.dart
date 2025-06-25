@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sql_lite_app/home.dart';
+import 'package:sql_lite_app/home_screen/presentation/views/home.dart';
 import 'package:sql_lite_app/sqldb.dart';
 
 class EditNodes extends StatefulWidget {
